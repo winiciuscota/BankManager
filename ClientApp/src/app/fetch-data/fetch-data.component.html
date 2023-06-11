@@ -1,0 +1,65 @@
+<h1 id="tableLabel">Accounts</h1>
+
+<p *ngIf="!accounts"><em>Loading...</em></p>
+
+<div class="alert alert-danger" role="alert" *ngIf="errorMessage">
+  {{ errorMessage }}
+</div>
+<div class="row">
+  <div class="col-md-2">
+    <button type="button" class="btn btn-outline-dark btn-md" (click)="setAction('new')">New Account</button>
+  </div>
+</div>
+<div class="row">
+
+  <div class="col-sm-6">
+    <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="accounts">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Balance</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let account of accounts">
+          <td>{{ account.name }}</td>
+          <td>{{ account.balance }}</td>
+          <td>
+            <button type="button" class="btn btn-outline-dark btn-md"
+              (click)="setAction('deposit', account)">Deposit</button>
+            <button type="button" class="btn btn-outline-dark btn-md"
+              (click)="setAction('withdraw', account)">Withdraw</button>
+            <button type="button" class="btn btn-danger" (click)="delete(account)">Delete</button>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-sm-5" *ngIf="action == 'new'">
+    New Account
+    <div class="form-group">
+      <label>Name</label>
+      <input type="email" class="form-control" [(ngModel)]="newAccount.name">
+    </div>
+    <div class="form-group">
+      <label>Initial balance</label>
+      <input class="form-control" type="number" [(ngModel)]="newAccount.initialBalance">
+    </div>
+    <p></p>
+    <button type="submit" class="btn btn-primary" (click)="addAccount()">Submit</button>
+  </div>
+
+  <div class="col-sm-5" *ngIf="action == 'withdraw' || action == 'deposit'">
+    {{ action | titlecase }}
+    <p></p>
+
+    Account: {{ selectedAccount.name}}
+    <p></p>
+    <div class="form-group">
+      <label>Amount</label>
+      <input class="form-control" type="number" [(ngModel)]="transactionAmount">
+    </div>
+    <p></p>
+    <button type="submit" class="btn btn-primary" (click)="transact(selectedAccount, action)">Submit</button>
+  </div>
+</div>
